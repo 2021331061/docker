@@ -1,0 +1,27 @@
+name: deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_KEY}}
+          username: ubuntu
+          key: ${{ secrets.SSH_PASS}}
+          scripts: |
+            cd /home/ubuntu/docker
+            git pull
+            docker rm -f api 2>/dev/null || true
+            docker build -t api .
+            docker run -d --name api -p 8080:8080 api
+
+      
