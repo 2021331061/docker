@@ -17,7 +17,7 @@ jobs:
           host: ${{ secrets.SSH_KEY}}
           username: ubuntu
           key: ${{ secrets.SSH_PASS}}
-          scripts: |
+          script: |
             cd /home/ubuntu/docker
             git pull
             docker rm -f api 2>/dev/null || true
